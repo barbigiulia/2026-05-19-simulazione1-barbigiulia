@@ -13,7 +13,7 @@ class Artista():
         return hash(self.ArtistId)
 
     def __str__(self):
-        return f"{self.ArtistId} - Nome Artista: {self.Name}"
+        return f"{self.Name}"
 
     def __eq__(self, other):
         return self.ArtistId==other.ArtistId

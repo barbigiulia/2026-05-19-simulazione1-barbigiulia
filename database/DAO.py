@@ -41,7 +41,7 @@ class DAO():
         return result
 
     @staticmethod
-    def getAcquistiClienti():
+    def getAcquistiClienti(genereID):
         # =========================================================
         # RESTITUISCE PER OGNI CLIENTE QUALI ARTISTI HA ACQUISTATO
         # ========================================================
@@ -54,10 +54,11 @@ class DAO():
             WHERE inv.InvoiceId = il.InvoiceId
             AND il.TrackId = t.TrackId
             AND t.AlbumId = alb.AlbumId
+            AND t.GenreId = %s
             GROUP BY inv.CustomerId, alb.ArtistId
 
                             """
-        cursor.execute(query)
+        cursor.execute(query, (genereID,))
         for row in cursor:
             result.append((row["CustomerId"], row["ArtistId"]))
         cursor.close()
@@ -67,7 +68,9 @@ class DAO():
 
     @staticmethod
     def getPopolarità():
-
+        #=====================================================
+        # RESTITUISCE LA POPOLARITA' GLOBALE PER OGNI ARTISTA
+        #=====================================================
         conn = DBConnect.get_connection()
         result = []
         cursor = conn.cursor(dictionary=True)
@@ -77,8 +80,7 @@ class DAO():
                         where i.TrackId =t.TrackId 
                         and t.AlbumId = a.AlbumId 
                         group by a.ArtistId 
-    
-                                  """
+                """
         cursor.execute(query)
         for row in cursor:
             result.append((row["ArtistId"], row["popolarità"]))

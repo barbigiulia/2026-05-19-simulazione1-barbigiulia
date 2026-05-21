@@ -33,7 +33,21 @@ class Controller:
             return
 
         self._model.buildGraph(id)
-        self._view.txt_result.controls.append(ft.Text(f"Grafo con {self._model.getNumNodi()} nodi e {self._model.getNumArchi()}"))
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(ft.Text(f"Grafo con {self._model.getNumNodi()} nodi e {self._model.getNumArchi()} archi"))
+
+        artistaMigliore, maxInfluenza = self._model.getArtistaMaggioreInfluenza()
+        self._view.txt_result.controls.append(ft.Text(f"l'artista più influente: {artistaMigliore}, con influenza {maxInfluenza} "))
+
+        archiPesati = self._model.getArchiConPeso()  # archiPesati è una lista di (u, v, {weight: ...})
+
+        archiPesati = sorted(archiPesati, key=lambda x: x[2]["weight"], reverse=True)
+
+        self._view.txt_result.controls.append(ft.Text("Top 5 archi:"))
+
+        for u, v, dati in archiPesati[:5]:
+           self._view.txt_result.controls.append(ft.Text(f"({u} --> {v}) :   peso  = {dati["weight"]}"))
+
         self._view.update_page()
 
 
